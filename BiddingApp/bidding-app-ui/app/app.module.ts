@@ -7,8 +7,11 @@ import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {AuthComponent} from'./auth/auth.component';
 import {UserRegisterComponent} from './register/user.register.component';
+import {BidLandingComponent} from './bid/bid-landing.component';
 import {appRoutes} from './routes';
 import {AppHttpService} from './services/app.http.service';
+import  {AuthInitResolver} from './auth/auth-init.resolver';
+
 
 @NgModule({
     imports:[
@@ -20,10 +23,12 @@ import {AppHttpService} from './services/app.http.service';
     declarations:[
         AppComponent,
         AuthComponent,
-        UserRegisterComponent
+        UserRegisterComponent,
+        BidLandingComponent
     ],
     providers:[
-        AppHttpService
+        AppHttpService,
+        AuthInitResolver
     ],
     bootstrap:[AppComponent]
 })

@@ -3,7 +3,7 @@ import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Subject, Observable} from 'rxjs/Rx';
 
 interface IAuthData{
-    flag:string,
+    flag:boolean,
     message:string
 }
  
@@ -16,8 +16,15 @@ export class AppHttpService{
     });
     options = new RequestOptions({headers:this.headers});
 
+    initAuth():Observable<any>{
+        return this.http.get("http://localhost:8080/auth/init").map((response:Response) =>
+              {
+               return response.json();
+        }).catch(this.errorHandler);
+    }
+
     doLogin(data):Observable<IAuthData>{
-        return this.http.post("/services/bidding/login", data, this.options).map((response:Response) =>
+        return this.http.post("http://localhost:8080/auth/login", data, this.options).map((response:Response) =>
               {
                return <IAuthData>response.json();
         }).catch(this.errorHandler);
@@ -25,7 +32,7 @@ export class AppHttpService{
 
     registerUser(data):Observable<IAuthData>{
        
-        return this.http.post("/services/bidding/register", data, this.options).map((response:Response) =>
+        return this.http.post("http://localhost:8080/auth/register", data, this.options).map((response:Response) =>
               {
                return <IAuthData>response.json();
         }).catch(this.errorHandler);

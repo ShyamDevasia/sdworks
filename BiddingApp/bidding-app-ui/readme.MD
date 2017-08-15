@@ -1,1 +1,1 @@
-Bidding App using ANGULAR + SPRING BOOT + JPA
+Bidding App using ANGULAR + SYSTEMJS + YARN
