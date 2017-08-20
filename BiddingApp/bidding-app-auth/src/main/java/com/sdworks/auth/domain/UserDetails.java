@@ -4,27 +4,29 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="USER_DETAILS")
 public class UserDetails {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private int userid;
 	private String username;
-	private String password;
 	private String email;
+	private String usertype;
 	
 	public UserDetails(){
 		
 	}
 
-	public Long getId() {
-		return id;
+	public int getUserid() {
+		return userid;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
 
 	public String getUsername() {
@@ -35,14 +37,6 @@ public class UserDetails {
 		this.username = username;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -50,5 +44,14 @@ public class UserDetails {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public String getUsertype() {
+		return usertype;
+	}
+
+	public void setUsertype(String usertype) {
+		this.usertype = usertype;
+	}
+
 	
 }

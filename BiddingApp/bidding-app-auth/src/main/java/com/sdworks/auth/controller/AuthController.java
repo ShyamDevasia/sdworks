@@ -1,8 +1,9 @@
 package com.sdworks.auth.controller;
 
-import javax.persistence.NonUniqueResultException;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sdworks.auth.domain.UserDetails;
-import com.sdworks.auth.repository.AuthRepository;
+import com.sdworks.auth.services.UserServices;
 import com.sdworks.auth.vo.MessageVO;
 import com.sdworks.auth.vo.UserVO;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Controller
 @RequestMapping("/auth")
@@ -21,18 +24,14 @@ import com.sdworks.auth.vo.UserVO;
 public class AuthController {
 
 	@Autowired
-	AuthRepository authRepository;
+	UserServices userServices;
+	
+	@Value("${bidding.auth.key}")
+	private String jwtKey;
 
 	@RequestMapping(value = "/init", method = RequestMethod.GET)
 	@ResponseBody
 	public MessageVO init() {
-
-		UserDetails user1 = new UserDetails();
-		user1.setUsername("sdworks");
-		user1.setPassword("admin");
-		user1.setEmail("sd.my.online@gmail.com");
-		authRepository.save(user1);
-
 		MessageVO msg = new MessageVO();
 		msg.setFlag(true);
 		msg.setMessage("init-success");
@@ -44,15 +43,13 @@ public class AuthController {
 	public MessageVO doLogin(@RequestBody UserVO uservo) {
 
 		MessageVO msg = new MessageVO();
+		String jwtToken = "";
+		if (userServices.isUserValid(uservo.getUsername(), uservo.getPassword())) {
 
-		try {
-			UserDetails user = authRepository.findByUsername(uservo.getUsername());
-			if (user != null && uservo.getPassword().equals(user.getPassword())) {
-				msg.setFlag(true);
-				msg.setMessage("valid");
-			}
-		} catch (NonUniqueResultException e) {
-			return msg;
+			jwtToken = Jwts.builder().setSubject(uservo.getUsername()).claim("roles", "user").setIssuedAt(new Date())
+					.signWith(SignatureAlgorithm.HS256, jwtKey).compact();
+			msg.setFlag(true);
+			msg.setMessage(jwtToken);
 		}
 
 		return msg;
@@ -66,16 +63,9 @@ public class AuthController {
 			return msg;
 		}
 
-		UserDetails newUser = new UserDetails();
-		newUser.setUsername(user.getUsername());
-		newUser.setPassword(user.getPassword());
-		newUser.setEmail(user.getEmail());
-		try {
-			authRepository.save(newUser);
+		if (userServices.saveUser(user)) {
 			msg.setFlag(true);
 			msg.setMessage("registration-success");
-		} catch (Exception e) {
-			return msg;
 		}
 
 		return msg;
