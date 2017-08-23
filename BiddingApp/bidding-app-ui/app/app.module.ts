@@ -11,6 +11,7 @@ import {BidLandingComponent} from './bid/bid-landing.component';
 import {appRoutes} from './routes';
 import {AppHttpService} from './services/app.http.service';
 import  {AuthInitResolver} from './auth/auth-init.resolver';
+import  {TokenManagerService} from './services/token.manager.service';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import  {AuthInitResolver} from './auth/auth-init.resolver';
     ],
     providers:[
         AppHttpService,
-        AuthInitResolver
+        AuthInitResolver,
+        TokenManagerService
     ],
     bootstrap:[AppComponent]
 })

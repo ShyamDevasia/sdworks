@@ -8,7 +8,7 @@ export class AuthInitResolver implements Resolve<any>{
     constructor(private httpService:AppHttpService){}
 
     resolve(){
-        return this.httpService.initAuth().subscribe();
+        return this.httpService.secure().subscribe();
     }
 
 }
