@@ -15,9 +15,11 @@ public class SecureController {
 	@RequestMapping(value = "/secure", method = RequestMethod.POST)
 	@ResponseBody
 	public MessageVO secure() {
+		
 		MessageVO msg = new MessageVO();
 		msg.setFlag(true);
 		msg.setMessage("secure-success");
 		return msg;
+		
 	}
 }
